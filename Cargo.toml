@@ -1,0 +1,21 @@
+[package]
+name = "engine"
+version = "0.1.0"
+authors = ["Mark McCaskey <rabidwaffle@gmail.com>"]
+
+[dependencies]
+piston = "*"
+#piston-glutin-window = "*"
+piston_window = "*"
+piston-ai_behavior = "*"
+log = "*"
+log4rs = "*"
+clap = "*"
+time = "*"
+tokio = "*"
+tokio-core = "*"
+futures = "*"
+dyon = "*"
+glium = "*"
+find_folder = "*"
+dev_menu = "*"
