@@ -6,6 +6,7 @@ use piston_window::*;
 use io::logging::*;
 use io::arguments::*;
 use asset_manager::asset_manager::AssetManager;
+use job_manager::job_manager::JobManager;
 
 
 pub struct GlobalState {
@@ -15,6 +16,7 @@ pub struct GlobalState {
     asset_manager: AssetManager,
     default_font: Glyphs,
     window: PistonWindow,
+    job_manager: JobManager,
 }
 
 impl GlobalState {
@@ -41,6 +43,7 @@ impl GlobalState {
             asset_manager: asset_manager,
             default_font: glyphs,
             window: window,
+            job_manager: JobManager::new(),
         }
     }
 
