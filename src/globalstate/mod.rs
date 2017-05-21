@@ -2,11 +2,16 @@ use log4rs::Handle;
 use find_folder;
 use std;
 use piston_window::*;
+use piston;
+
+mod keymap;
 
 use io::logging::*;
 use io::arguments::*;
 use asset_manager::asset_manager::AssetManager;
 use job_manager::job_manager::JobManager;
+use game::GameInputEvent;
+use self::keymap::*;
 
 
 pub struct GlobalState {
@@ -17,6 +22,7 @@ pub struct GlobalState {
     default_font: Glyphs,
     window: PistonWindow,
     job_manager: JobManager,
+    key_map: KeyMap,
 }
 
 impl GlobalState {
@@ -44,23 +50,46 @@ impl GlobalState {
             default_font: glyphs,
             window: window,
             job_manager: JobManager::new(),
+            key_map: KeyMap::new(),
         }
     }
 
     pub fn run(&mut self) -> () {
-        while let Some(e) = self.window.next() {
-            let ref mut font = self.default_font;
-            self.window.draw_2d(&e, |c, g| {
-                let transform = c.transform.trans(10.0, 100.0);
 
-                clear([0.0, 0.0, 0.0, 1.0], g);
-                text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw("Hello world!",
-                                                                     font,
-                                                                     &c.draw_state,
-                                                                     transform,
-                                                                     g);
-            });
+        while let Some(e) = self.window.next() {
+            match e {
+                Input::Press(button) => self.press_button(button),
+                Input::Release(button) => self.release_button(button),
+                _ => (),
+            }
+
+            self.draw();
         }
 
     }
+
+    fn draw(&mut self) {
+        let ref mut font = self.default_font;
+        self.window.draw_2d(&e, |c, g| {
+            let transform = c.transform.trans(10.0, 100.0);
+
+            clear([0.0, 0.0, 0.0, 1.0], g);
+            text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(format!("{:?}", e).as_ref(),
+                                                                 font,
+                                                                 &c.draw_state,
+                                                                 transform,
+                                                                 g);
+        });
+
+    }
+
+    fn press_button(&mut self, ref button: piston::input::Button) {
+        let game_events = self.key_map.get(button);
+        for ge in game_events {
+            self.run_game_event(ge)
+        }
+    }
+    fn release_button(&mut self, button: piston::input::Button) {}
+
+    fn run_game_event(&mut self, gie: GameInputEvent) {}
 }

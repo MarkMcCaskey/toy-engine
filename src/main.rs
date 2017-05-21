@@ -20,6 +20,8 @@ pub mod texture;
 pub mod io;
 pub mod globalstate;
 pub mod job_manager;
+pub mod game;
+pub mod fsm;
 
 use piston_window::*;
 
